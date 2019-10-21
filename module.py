@@ -1,7 +1,6 @@
 import numpy as np
 from sklearn.cluster import KMeans
 from scipy.spatial import distance
-import matplotlib.pyplot as plt
 
 def get_Mu_hat(data, num_neurons, num_labels):
     mu_hat = [np.zeros(num_neurons)] * num_labels
@@ -139,18 +138,3 @@ def get_FPR(threshold, type, N_ood, k, f_of_x_ood, roc_x, num_neurons, num_label
     fpr = num_of_in_distribution / N_ood
     roc_x.append(fpr)
     print('FPR on out-of-distribution(ENMIST): {:.4f}'.format(fpr), end='\n')
-    
-def plot(roc_x, roc_y, roc_x_u, roc_y_u, roc_x_80, roc_y_80):
-    plt.figure()
-    plt.plot(roc_x, roc_y, color='blue', label='M100')
-    plt.plot(roc_x_u, roc_y_u, color='green', label='E')
-    plt.plot(roc_x_80, roc_y_80, color='red', label='M80')
-    plt.title("ROC curve")
-    plt.xticks([0, 0.5, 1])
-    plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
-    plt.xlabel("FPR on out-of-distribution(Emnist)")
-    plt.ylabel("TPR on in-distribution (mnist)")
-    plt.xlim([0,1])
-    plt.ylim([0,1])
-    plt.legend()
-    plt.show()

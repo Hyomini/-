@@ -7,7 +7,6 @@ from scipy.spatial import distance
 import pandas as pd
 from sklearn.manifold import TSNE
 from sklearn.cluster import KMeans
-import seaborn as sns
 import gzip as gz
 from sklearn.utils import shuffle
 import matplotlib.pyplot as plt
@@ -225,6 +224,18 @@ mu_hat_80 = module.get_Mu_hat(data_80, num_of_neurons, num_of_labels)
 sigma_hat_80 = module.get_Sigma_hat(data_80, mu_hat, num_of_neurons, num_of_labels, N_80)
 inv_sigma_hat_80 = np.linalg.inv(sigma_hat_80)
 
+# Histogram for each label's Mahalanobis(Euclidean) distance distribution ----------------------------------------------
+'''
+for label in range(num_of_labels):
+    # data = np.sort(e_dist_data[label])
+    data = np.sort(m_dist_data[label])
+    bins = np.arange(0, 300, 2)
+    plt.hist(data, bins, normed=True)
+    plt.title("label: %d" % label)
+    plt.xlabel('distance', fontsize=15)
+    plt.ylabel('num of data', fontsize=15)
+    plt.show(block=True)
+'''
 
 ########################################################################################################################
 # Receiver operating characteristic curve ==============================================================================
@@ -344,4 +355,16 @@ for threshold in range(0,380,1):
     print('Time: {:.2f}s'.format(repeat_time - start_time))
     print()
 
-module.plot(roc_x, roc_y, roc_x_u, roc_y_u, roc_x_80, roc_y_80)
+plt.figure()
+plt.plot(roc_x, roc_y, color='blue', label='M100')
+plt.plot(roc_x_u, roc_y_u, color='green', label='E')
+plt.plot(roc_x_80, roc_y_80, color='red', label='M80')
+plt.title("ROC curve")
+plt.xticks([0, 0.5, 1])
+plt.yticks([0, 0.2, 0.4, 0.6, 0.8, 1])
+plt.xlabel("FPR on out-of-distribution(Notmnist)")
+plt.ylabel("TPR on in-distribution (mnist)")
+plt.xlim([0,1])
+plt.ylim([0,1])
+plt.legend()
+plt.show()
